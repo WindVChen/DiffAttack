@@ -1,0 +1,12 @@
+adversarial_robustness_toolbox==1.13.1
+diffusers==0.9.0
+eagerpy==0.30.0
+natsort==8.2.0
+numpy==1.21.2
+opencv_python==4.5.4.58
+Pillow==9.2.0
+scipy==1.7.1
+timm==0.4.12
+torch==1.12.0+cu113
+torchvision==0.13.0+cu113
+tqdm==4.62.2
