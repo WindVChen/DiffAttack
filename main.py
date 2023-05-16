@@ -16,24 +16,32 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--save_dir', default="output", type=str,
                     help='Where to save the adversarial examples, and other results')
-parser.add_argument('--images_root', default=r"C:\Users\PC\Desktop\imagenet-compatible\images", type=str,
+parser.add_argument('--images_root', default=r"demo\images", type=str,
                     help='The clean images root directory')
-parser.add_argument('--label_path', default=r"C:\Users\PC\Desktop\imagenet-compatible\labels.txt", type=str,
+parser.add_argument('--label_path', default=r"demo\labels.txt", type=str,
                     help='The clean images labels.txt')
 parser.add_argument('--is_test', default=False, type=bool,
                     help='Whether to test the robustness of the generated adversarial examples')
 parser.add_argument('--pretrained_diffusion_path',
-                    default=r"C:\Users\PC\.cache\huggingface\diffusers\models--stabilityai--stable-diffusion-2-base\snapshots\455a0f460825e16078d762b05bddae578e2f2727",
+                    default=r"stabilityai/stable-diffusion-2-base",
                     type=str,
                     help='Change the path to `stabilityai/stable-diffusion-2-base` if want to use the pretrained model')
 
-parser.add_argument('--guidance', default=2.5, type=int, help='guidance scale of diffusion models')
 parser.add_argument('--diffusion_steps', default=20, type=int, help='Total DDIM sampling steps')
 parser.add_argument('--start_step', default=15, type=int, help='Which DDIM step to start the attack')
 parser.add_argument('--iterations', default=30, type=int, help='Iterations of optimizing the adv_image')
 parser.add_argument('--res', default=224, type=int, help='Input image resized resolution')
 parser.add_argument('--model_name', default="inception", type=str,
                     help='The surrogate model from which the adversarial examples are crafted')
+parser.add_argument('--is_apply_mask', default=False, type=bool,
+                    help='Whether to leverage pseudo mask for better imperceptibility (See Appendix D)')
+parser.add_argument('--is_hard_mask', default=False, type=bool,
+                    help='Which type of mask to leverage (See Appendix D)')
+
+parser.add_argument('--guidance', default=2.5, type=float, help='guidance scale of diffusion models')
+parser.add_argument('--attack_loss_weight', default=10, type=int, help='attack loss weight factor')
+parser.add_argument('--cross_attn_loss_weight', default=10000, type=int, help='cross attention loss weight factor')
+parser.add_argument('--self_attn_loss_weight', default=100, type=int, help='self attention loss weight factor')
 
 
 def seed_torch(seed=42):
@@ -53,7 +61,7 @@ seed_torch(42)
 
 def run_diffusion_attack(image, label, diffusion_model, diffusion_steps, guidance=2.5,
                          self_replace_steps=1., save_dir=r"C:\Users\PC\Desktop\output", res=224,
-                         model_name="inception", start_step=15, iterations=30):
+                         model_name="inception", start_step=15, iterations=30, args=None):
     controller = AttentionControlEdit(diffusion_steps, self_replace_steps)
 
     adv_image, clean_acc, adv_acc = diff_latent_attack.diffattack(diffusion_model, label, controller,
@@ -62,7 +70,7 @@ def run_diffusion_attack(image, label, diffusion_model, diffusion_steps, guidanc
                                                                   image=image,
                                                                   save_path=save_dir, res=res, model_name=model_name,
                                                                   start_step=start_step,
-                                                                  iterations=iterations)
+                                                                  iterations=iterations, args=args)
 
     return adv_image, clean_acc, adv_acc
 
@@ -144,7 +152,7 @@ if __name__ == "__main__":
                                                              start_step=start_step,
                                                              iterations=iterations,
                                                              save_dir=os.path.join(save_dir,
-                                                                                   str(ind).rjust(4, '0')))
+                                                                                   str(ind).rjust(4, '0')), args=args)
         adv_image = adv_image.astype(np.float32) / 255.0
         adv_images.append(adv_image[None].transpose(0, 3, 1, 2))
 

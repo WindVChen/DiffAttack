@@ -1,23 +1,25 @@
-# Diffusion Models for Transferable and Unrestricted Adversarial Attack
-![visitors]()
-![GitHub stars]()
-[![]()](#License)
+<div align="center">
 
-## Share us a :star: if this repo does help
+<h1><a href="https://arxiv.org/abs/2305.08192">Diffusion Models for Imperceptible and Transferable Adversarial Attack</a></h1>
 
-This repository is the official implementation of:
+**[Jianqi Chen](https://windvchen.github.io/), [Hao Chen](https://scholar.google.com.hk/citations?hl=en&user=BEDNoZIAAAAJ&view_op=list_works&sortby=pubdate), [Keyan Chen](https://scholar.google.com.hk/citations?hl=en&user=5RF4ia8AAAAJ), [Yilan Zhang](https://scholar.google.com.hk/citations?user=wZ4M4ecAAAAJ&hl=en&oi=ao), [Zhengxia Zou](https://scholar.google.com.hk/citations?hl=en&user=DzwoyZsAAAAJ), and [Zhenwei Shi](https://scholar.google.com.hk/citations?hl=en&user=kNhFWQIAAAAJ)**
 
-<font size=4>[Diffusion Models for Transferable and Unrestricted Adversarial Attack]()</font>
+![visitors](https://visitor-badge.glitch.me/badge?page_id=windvchen.DiffAttack.visitor)
+![GitHub stars](https://github.com/WindVChen/DiffAttack)
+[![](https://img.shields.io/badge/license-Apache--2.0-blue)](#License)
+[![](https://img.shields.io/badge/arXiv-2305.08192-b31b1b.svg)](https://arxiv.org/abs/2305.08192)
 
-**[Jianqi Chen](https://windvchen.github.io/), [Hao Chen](https://scholar.google.com.hk/citations?hl=en&user=BEDNoZIAAAAJ&view_op=list_works&sortby=pubdate), [Keyan Chen](https://scholar.google.com.hk/citations?hl=en&user=5RF4ia8AAAAJ), [Yilan Zhang](https://scholar.google.com.hk/citations?user=wZ4M4ecAAAAJ&hl=en&oi=ao), [Zhengxia Zou](https://scholar.google.com.hk/citations?hl=en&user=DzwoyZsAAAAJ), and [Zhenwei Shi*](https://scholar.google.com.hk/citations?hl=en&user=kNhFWQIAAAAJ)**
+</div>
 
-If you encounter any question, please feel free to contact us. You can create an issue or just send email to me windvchen@gmail.com. Also welcome for any idea exchange and discussion.
+### Share us a :star: if this repo does help
+
+This repository is the official implementation of *DiffAttack*. If you encounter any question, please feel free to contact us. You can create an issue or just send email to me windvchen@gmail.com. Also welcome for any idea exchange and discussion.
 
 ## Updates
 
-***04/30/2023***
+[**05/16/2023**] Code is public.
 
-Code cleanup done. Waiting to be made public.
+[**04/30/2023**] Code cleanup done. Waiting to be made public.
 
 
 ## Table of Contents
@@ -37,7 +39,7 @@ Code cleanup done. Waiting to be made public.
 
 ![DiffAttack's framework](Figs/Framework.png)
 
-Many existing adversarial attacks generate $L_p$-norm perturbations on image RGB space. Although some achievements are gained on transferability and attack success rate, the crafted adversarial examples are easily perceived by human eyes. To tackle with that, some recent works explored unrestricted attacks which are human-insensitive despite large $L_p$-norm values. Following this line, we propose a much powerful unrestricted attack based on diffusion models. Specifically, instead of direct manipulation in pixel space, we craft perturbations in latent space of diffusion models. We further exploit the properties of diffusion models that they can be approximated as strong surrogate recognition models and that they tend to generate natural perturbations embedded with many semantic cues. With specific designs to "deceive" diffusion models and preserve content structure, our proposed method, \emph{DiffAttack}, achieves both good imperceptibility and transferability. To our knowledge, \emph{DiffAttack} is the first method that introduce diffusion models into adversarial attack field. Extensive experiments on various model structures (including CNNs, Transformers, MLPs) and various defense methods have demonstrated our superiority over other attack methods.
+Many existing adversarial attacks generate $L_p$-norm perturbations on image RGB space. Despite some achievements in transferability and attack success rate, the crafted adversarial examples are easily perceived by human eyes. Towards visual imperceptibility, some recent works explore unrestricted attacks without $L_p$-norm constraints, yet lacking transferability of attacking black-box models. In this work, we propose **a novel imperceptible and transferable attack by leveraging both the generative and discriminative power of diffusion models**. Specifically, instead of direct manipulation in pixel space, we craft perturbations in latent space of diffusion models. Combined with well-designed content-preserving structures, we can generate human-insensitive perturbations embedded with semantic clues. For better transferability, we further "deceive" the diffusion model which can be viewed as an additional recognition surrogate, by distracting its attention away from the target regions. To our knowledge, our proposed method, ***DiffAttack***, is **the first that introduces diffusion models into adversarial attack field**. Extensive experiments on various model structures (including CNNs, Transformers, MLPs) and defense methods have demonstrated our superiority over other attack methods.
 
 ## Requirements
 
@@ -57,11 +59,11 @@ Many existing adversarial attacks generate $L_p$-norm perturbations on image RGB
 
 3. Datasets
    - There have been demo-datasets in [demo](demo), you can directly run the optimization code below to see the results.
-   - If you want to test the full `ImageNet-Compatible` dataset, please download the dataset [here]() and then change the settings of `images_root` and `label_path` in [main.py](main.py)
+   - If you want to test the full `ImageNet-Compatible` dataset, please download the dataset [here](https://drive.google.com/file/d/1sAD1aVLUsgao1X-mu6PwcBL8s68dm5U9/view?usp=sharing) and then change the settings of `images_root` and `label_path` in [main.py](main.py)
 
 4. Pre-trained Models
    - We adopt `Stable Diffusion 2.0` as our diffusion model, you can load the pretrained weight by setting `pretrained_diffusion_path="stabilityai/stable-diffusion-2-base"` in [main.py](main.py).
-   - For the pretrained weights of the adversarially trained models (Adv-Inc-v3, Inc-v3$_{ens3}$, Inc-v3$_{ens4}$, IncRes-v2$_{ens}$) in Section 4.2.2 of our paper, you can download them from [here](https://github.com/ylhz/tf_to_pytorch_model) and then place them into the directory `pretrained_models`.
+   - For the pretrained weights of the adversarially trained models (Adv-Inc-v3, Inc-v3<sub>ens3</sub>, Inc-v3<sub>ens4</sub>, IncRes-v2<sub>ens</sub>) in Section 4.2.2 of our paper, you can download them from [here](https://github.com/ylhz/tf_to_pytorch_model) and then place them into the directory `pretrained_models`.
 
 ## Crafting Adversarial Examples
 
@@ -70,9 +72,11 @@ To craft adversarial examples, run this command:
 ```
 python main.py --model_name <surrogate model> --save_dir <save path> --images_root <clean images' path> --label_path <clean images' label.txt>
 ```
-The specific surrogate models we support can be found in `model_selection` function in [other_attacks](other_attacks.py).
+The specific surrogate models we support can be found in `model_selection` function in [other_attacks.py](other_attacks.py).
 
-The results will be saved in the directory `<save path>`, including adversarial examples, perturbations, before/after cross attention, self attention, original images, and logs.
+The results will be saved in the directory `<save path>`, including adversarial examples, perturbations, original images, and logs.
+
+For some specific images that distort too much, you can consider weaken the inversion strength by setting `start_step` to a larger value, or leveraging pseudo masks by setting `is_apply_mask=True`.
 
 ## Evaluation
 
@@ -89,25 +93,32 @@ The `save_dir` here denotes the path to save only logs. The `images_root` here s
 ### Robustness on defensive approaches
 
 Apart from the adversarially trained models, we also evaluate our attack's power to deceive other defensive approaches as displayed in Section 4.2.2 in our paper, their implementations are as follows:
-- Adversarially trained models (Adv-Inc-v3, Inc-v3$_{ens3}$, Inc-v3$_{ens4}$, IncRes-v2$_{ens}$): Run the code in [Robustness on other normally trained models](#robustness-on-other-normally-trained-models).
+- Adversarially trained models (Adv-Inc-v3, Inc-v3<sub>ens3</sub>, Inc-v3<sub>ens4</sub>, IncRes-v2<sub>ens</sub>): Run the code in [Robustness on other normally trained models](#robustness-on-other-normally-trained-models).
 - [HGD](https://github.com/lfz/Guided-Denoise): Change the input size to 224, and then directly run the original code.
 - [R&P](https://github.com/cihangxie/NIPS2017_adv_challenge_defense): Since our target size is 224, we reset the image scale augmentation proportionally (232~248). Then run the original code.
 - [NIPS-r3](https://github.com/anlthms/nips-2017/tree/master/mmd): Since its ensembled models failed to process inputs with 224 size, we run its original code that resized the inputs to 299 size.
 - [RS](https://github.com/locuslab/smoothing): Change the input size to 224 and set sigma=0.25, skip=1, max=-1, N0=100, N=100, alpha=0.001, then run the original code.
 - [NRP](https://github.com/Muzammal-Naseer/NRP): Change the input size to 224 and set purifier=NRP, dynamic=True, then run the original code.
-- [DiffPure](https://github.com/NVlabs/DiffPure): Modify the original codes to evaluate the existing adversarial examples, not crafted examples again
+- [DiffPure](https://github.com/NVlabs/DiffPure): Modify the original codes to evaluate the existing adversarial examples, not crafted examples again.
 
 ## Results
 
-![Visual comparisons](Figs/Visual.png)
-![Robustness on normally trained models](Figs/Normal.png)
-![Robustness on defensive approaches](Figs/Defensive.png)
+![Visual comparisons](Figs/Visual.png#pic_center)
+![Robustness on normally trained models](Figs/Normal.png#pic_center)
+![Robustness on defensive approaches](Figs/Defensive.png#pic_center)
 
 
 ## Citation & Acknowledgments
 If you find this paper useful in your research, please consider citing:
 ```
-
+@misc{chen2023diffusion,
+      title={Diffusion Models for Imperceptible and Transferable Adversarial Attack}, 
+      author={Jianqi Chen and Hao Chen and Keyan Chen and Yilan Zhang and Zhengxia Zou and Zhenwei Shi},
+      year={2023},
+      eprint={2305.08192},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```
 
 Also thanks for the open source code of [Prompt-to-Prompt](https://github.com/google/prompt-to-prompt). Some of our codes are based on them.

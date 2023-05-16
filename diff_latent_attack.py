@@ -211,7 +211,8 @@ def diffattack(
         start_step=15,
         iterations=30,
         verbose=True,
-        topN=1
+        topN=1,
+        args=None
 ):
     label = torch.from_numpy(label).long().cuda()
 
@@ -346,8 +347,8 @@ def diffattack(
     init_image = preprocess(image, res)
 
     #  “Pseudo” Mask for better Imperceptibility, yet sacrifice the transferability. Details please refer to Appendix D.
-    apply_mask = False
-    hard_mask = False
+    apply_mask = args.is_apply_mask
+    hard_mask = args.is_hard_mask
     if apply_mask:
         init_mask = None
     else:
@@ -388,13 +389,13 @@ def diffattack(
 
         pred = classifier(out_image)
 
-        attack_loss = - cross_entro(pred, label) * 10
+        attack_loss = - cross_entro(pred, label) * args.attack_loss_weight
 
         # “Deceive” Strong Diffusion Model. Details please refer to Section 3.3
-        variance_cross_attn_loss = after_true_label_attention_map.var() * 10000
+        variance_cross_attn_loss = after_true_label_attention_map.var() * args.cross_attn_loss_weight
 
         # Preserve Content Structure. Details please refer to Section 3.4
-        self_attn_loss = controller.loss * 100
+        self_attn_loss = controller.loss * args.self_attn_loss_weight
 
         loss = self_attn_loss + attack_loss + variance_cross_attn_loss
 
@@ -465,19 +466,19 @@ def diffattack(
     view_images(diff.clip(0, 255), show=False,
                 save_path=save_path + "_diff_relative.png")
 
-    diff = (np.abs(perturbed - real) * 255).astype(np.uint8) * 5
+    diff = (np.abs(perturbed - real) * 255).astype(np.uint8)
     view_images(diff.clip(0, 255), show=False,
                 save_path=save_path + "_diff_absolute.png")
 
     reset_attention_control(model)
 
-    utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
-                               save_path=r"{}_crossAttentionBefore.jpg".format(save_path))
-    utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
-                               save_path=r"{}_crossAttentionAfter.jpg".format(save_path), select=1)
-    utils.show_self_attention_comp(prompt, controller, res=7, from_where=("up", "down"),
-                                   save_path=r"{}_selfAttentionBefore.jpg".format(save_path))
-    utils.show_self_attention_comp(prompt, controller, res=7, from_where=("up", "down"),
-                                   save_path=r"{}_selfAttentionAfter.jpg".format(save_path), select=1)
+    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
+    #                            save_path=r"{}_crossAttentionBefore.jpg".format(save_path))
+    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
+    #                            save_path=r"{}_crossAttentionAfter.jpg".format(save_path), select=1)
+    # utils.show_self_attention_comp(prompt, controller, res=14, from_where=("up", "down"),
+    #                                save_path=r"{}_selfAttentionBefore.jpg".format(save_path))
+    # utils.show_self_attention_comp(prompt, controller, res=14, from_where=("up", "down"),
+    #                                save_path=r"{}_selfAttentionAfter.jpg".format(save_path), select=1)
 
-    return image, 0, 0
+    return image[0], 0, 0
