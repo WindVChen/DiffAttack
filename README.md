@@ -5,7 +5,7 @@
 **[Jianqi Chen](https://windvchen.github.io/), [Hao Chen](https://scholar.google.com.hk/citations?hl=en&user=BEDNoZIAAAAJ&view_op=list_works&sortby=pubdate), [Keyan Chen](https://scholar.google.com.hk/citations?hl=en&user=5RF4ia8AAAAJ), [Yilan Zhang](https://scholar.google.com.hk/citations?user=wZ4M4ecAAAAJ&hl=en&oi=ao), [Zhengxia Zou](https://scholar.google.com.hk/citations?hl=en&user=DzwoyZsAAAAJ), and [Zhenwei Shi](https://scholar.google.com.hk/citations?hl=en&user=kNhFWQIAAAAJ)**
 
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=windvchen.DiffAttack.visitor)
-![GitHub stars](https://github.com/WindVChen/DiffAttack)
+![GitHub stars](https://badgen.net/github/stars/windvchen/DiffAttack)
 [![](https://img.shields.io/badge/license-Apache--2.0-blue)](#License)
 [![](https://img.shields.io/badge/arXiv-2305.08192-b31b1b.svg)](https://arxiv.org/abs/2305.08192)
 
