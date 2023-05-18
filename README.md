@@ -111,13 +111,11 @@ Apart from the adversarially trained models, we also evaluate our attack's power
 ## Citation & Acknowledgments
 If you find this paper useful in your research, please consider citing:
 ```
-@misc{chen2023diffusion,
-      title={Diffusion Models for Imperceptible and Transferable Adversarial Attack}, 
-      author={Jianqi Chen and Hao Chen and Keyan Chen and Yilan Zhang and Zhengxia Zou and Zhenwei Shi},
-      year={2023},
-      eprint={2305.08192},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@article{chen2023diffusion,
+  title={Diffusion Models for Imperceptible and Transferable Adversarial Attack},
+  author={Chen, Jianqi and Chen, Hao and Chen, Keyan and Zhang, Yilan and Zou, Zhengxia and Shi, Zhenwei},
+  journal={arXiv preprint arXiv:2305.08192},
+  year={2023}
 }
 ```
 
