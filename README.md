@@ -17,6 +17,8 @@ This repository is the official implementation of *DiffAttack*. If you encounter
 
 ## Updates
 
+[**09/07/2023**] Besides `ImageNet-Compatible`, the code now also supports generating adversarial attacks on `CUB_200_2011` and `Standford_Cars` datasets. 🚀🚀 Please refer to [Requirements](#Requirements) for more details.
+
 [**05/16/2023**] Code is public.
 
 [**04/30/2023**] Code cleanup done. Waiting to be made public.
@@ -59,11 +61,15 @@ Many existing adversarial attacks generate $L_p$-norm perturbations on image RGB
 
 3. Datasets
    - There have been demo-datasets in [demo](demo), you can directly run the optimization code below to see the results.
-   - If you want to test the full `ImageNet-Compatible` dataset, please download the dataset [here](https://drive.google.com/file/d/1sAD1aVLUsgao1X-mu6PwcBL8s68dm5U9/view?usp=sharing) and then change the settings of `images_root` and `label_path` in [main.py](main.py)
+   - If you want to test the full `ImageNet-Compatible` dataset, please download the dataset [ImageNet-Compatible](https://drive.google.com/file/d/1sAD1aVLUsgao1X-mu6PwcBL8s68dm5U9/view?usp=sharing) and then change the settings of `images_root` and `label_path` in [main.py](main.py)
 
 4. Pre-trained Models
    - We adopt `Stable Diffusion 2.0` as our diffusion model, you can load the pretrained weight by setting `pretrained_diffusion_path="stabilityai/stable-diffusion-2-base"` in [main.py](main.py).
    - For the pretrained weights of the adversarially trained models (Adv-Inc-v3, Inc-v3<sub>ens3</sub>, Inc-v3<sub>ens4</sub>, IncRes-v2<sub>ens</sub>) in Section 4.2.2 of our paper, you can download them from [here](https://github.com/ylhz/tf_to_pytorch_model) and then place them into the directory `pretrained_models`.
+
+5. (Supplement) Attack **CUB_200_2011** and **Standford Cars** datasets
+   - Dataset: Aligned with **ImageNet-Compatible**, we randomly select 1K images from **CUB_200_2011** adn **Standford Cars** datasets, respectively. You can download the dataset here [[CUB_200_2011](https://drive.google.com/file/d/1umBxwhRz6PIG6cli40Fc0pAFl2DFu9WQ/view?usp=sharing) | [Standford Cars](https://drive.google.com/file/d/1FiH98QyyM9YQ70PPJD4-CqOBZAIMlWJL/view?usp=sharing)] and then change the settings of `images_root` and `label_path` in [main.py](main.py). Note that you should also set `--dataset_name` to `cub_200_2011` or `standford_car` when running the code.
+   - Pre-trained Models: You can download models (ResNet50, SENet154, and SE-ResNet101) pretrained on CUB_200_2011 and Standford Cars from [Beyond-ImageNet-Attack](https://github.com/Alibaba-AAIG/Beyond-ImageNet-Attack) repository. Then place them into the directory `pretrained_models`.
 
 ## Crafting Adversarial Examples
 
@@ -72,7 +78,7 @@ To craft adversarial examples, run this command:
 ```
 python main.py --model_name <surrogate model> --save_dir <save path> --images_root <clean images' path> --label_path <clean images' label.txt>
 ```
-The specific surrogate models we support can be found in `model_selection` function in [other_attacks.py](other_attacks.py).
+The specific surrogate models we support can be found in `model_selection` function in [other_attacks.py](other_attacks.py). You can also leverage the parameter `--dataset_name` to generate adversarial examples on other datasets, such as `cub_200_2011` and `standford_car`.
 
 The results will be saved in the directory `<save path>`, including adversarial examples, perturbations, original images, and logs.
 

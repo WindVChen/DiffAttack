@@ -13,6 +13,7 @@ from torch_nets import (
 )
 import warnings
 import pytorch_fid.fid_score as fid_score
+from Finegrained_model import model as otherModel
 
 warnings.filterwarnings("ignore")
 
@@ -68,16 +69,40 @@ def model_selection(name):
         net = tf2torch_ens_adv_inc_res_v2
         model_path = os.path.join("pretrained_models", name + '.npy')
         model = net.KitModel(model_path)
+    elif name == 'cubResnet50':
+        model = otherModel.CUB()[0]
+    elif name == 'cubSEResnet154':
+        model = otherModel.CUB()[1]
+    elif name == 'cubSEResnet101':
+        model = otherModel.CUB()[2]
+    elif name == 'carResnet50':
+        model = otherModel.CAR()[0]
+    elif name == 'carSEResnet154':
+        model = otherModel.CAR()[1]
+    elif name == 'carSEResnet101':
+        model = otherModel.CAR()[2]
     else:
         raise NotImplementedError("No such model!")
     return model.cuda()
 
 
-def model_transfer(clean_img, adv_img, label, res, save_path=r"C:\Users\PC\Desktop\output", fid_path=None):
+def model_transfer(clean_img, adv_img, label, res, save_path=r"C:\Users\PC\Desktop\output", fid_path=None, args=None):
     log = open(os.path.join(save_path, "log.txt"), mode="w", encoding="utf-8")
-    models_transfer_name = ["resnet", "vgg", "mobile", "inception", "convnext", "vit", "swin", 'deit-b', 'deit-s',
-                            'mixer-b', 'mixer-l', 'tf2torch_adv_inception_v3', 'tf2torch_ens3_adv_inc_v3',
-                            'tf2torch_ens4_adv_inc_v3', 'tf2torch_ens_adv_inc_res_v2']
+
+    if args.dataset_name == "imagenet_compatible":
+        models_transfer_name = ["resnet", "vgg", "mobile", "inception", "convnext", "vit", "swin", 'deit-b', 'deit-s',
+                                'mixer-b', 'mixer-l', 'tf2torch_adv_inception_v3', 'tf2torch_ens3_adv_inc_v3',
+                                'tf2torch_ens4_adv_inc_v3', 'tf2torch_ens_adv_inc_res_v2']
+        nb_classes = 1000
+    elif args.dataset_name == "cub_200_2011":
+        models_transfer_name = ["cubResnet50", "cubSEResnet154", "cubSEResnet101"]
+        nb_classes = 200
+    elif args.dataset_name == "standford_car":
+        models_transfer_name = ["carResnet50", "carSEResnet154", "carSEResnet101"]
+        nb_classes = 196
+    else:
+        raise NotImplementedError
+
     all_clean_accuracy = []
     all_adv_accuracy = []
     for name in models_transfer_name:
@@ -90,7 +115,7 @@ def model_transfer(clean_img, adv_img, label, res, save_path=r"C:\Users\PC\Deskt
             clip_values=(0, 1),
             loss=nn.CrossEntropyLoss(),
             input_shape=(3, res, res),
-            nb_classes=1000,
+            nb_classes=nb_classes,
             preprocessing=(np.array([0.5, 0.5, 0.5]), np.array([0.5, 0.5, 0.5])) if "adv" in name else (
                 np.array([0.485, 0.456, 0.406]), np.array([0.229, 0.224, 0.225])),
             device_type='gpu',
@@ -114,7 +139,7 @@ def model_transfer(clean_img, adv_img, label, res, save_path=r"C:\Users\PC\Deskt
     print("clean_accuracy: ", "\t".join([str(x) for x in all_clean_accuracy]), file=log)
     print("adv_accuracy: ", "\t".join([str(x) for x in all_adv_accuracy]), file=log)
 
-    fid = fid_score.main(save_path if fid_path is None else fid_path)
+    fid = fid_score.main(save_path if fid_path is None else fid_path, args.dataset_name)
     print("\n*********fid: {}********".format(fid))
     print("\n*********fid: {}********".format(fid), file=log)
 

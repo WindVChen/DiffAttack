@@ -6,8 +6,6 @@ from torch import optim
 from utils import view_images, aggregate_attention
 from distances import LpDistance
 import other_attacks
-import utils
-import imagenet_label
 
 
 def preprocess(image, res=512):
@@ -214,6 +212,15 @@ def diffattack(
         topN=1,
         args=None
 ):
+    if args.dataset_name == "imagenet_compatible":
+        from dataset_caption import imagenet_label
+    elif args.dataset_name == "cub_200_2011":
+        from dataset_caption import CUB_label as imagenet_label
+    elif args.dataset_name == "standford_car":
+        from dataset_caption import stanfordCar_label as imagenet_label
+    else:
+        raise NotImplementedError
+
     label = torch.from_numpy(label).long().cuda()
 
     model.vae.requires_grad_(False)
@@ -387,7 +394,11 @@ def diffattack(
         out_image = out_image[:, :, :].sub(mean).div(std)
         out_image = out_image.permute(0, 3, 1, 2)
 
-        pred = classifier(out_image)
+        # For datasets like CUB, Standford Car, the logit should be divided by 10, or there will be gradient Vanishing.
+        if args.dataset_name != "imagenet_compatible":
+            pred = classifier(out_image) / 10
+        else:
+            pred = classifier(out_image)
 
         attack_loss = - cross_entro(pred, label) * args.attack_loss_weight
 

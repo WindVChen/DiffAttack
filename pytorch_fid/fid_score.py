@@ -66,7 +66,7 @@ parser.add_argument('--dims', type=int, default=2048,
 parser.add_argument('--save-stats', action='store_true',
                     help=('Generate an npz archive from a directory of samples. '
                           'The first path is used as input and the second as output.'))
-parser.add_argument('--path', type=str, nargs=2, default=[r"C:\Users\PC\Desktop\output", r"pytorch_fid\imagenet.npz"],
+parser.add_argument('--path', type=str, nargs=2, default=[r"C:\Users\PC\Desktop\output", "pytorch_fid/imagenet.npz"],
                     help=('Paths to the generated images or '
                           'to .npz statistic files'))
 
@@ -238,7 +238,7 @@ def compute_statistics_of_path(path, model, batch_size, dims, device,
             m, s = f['mu'][:], f['sigma'][:]
     else:
         import glob
-        path = glob.glob(path + r"\**\*adv_image*", recursive=True)
+        path = glob.glob(path + "/**/*adv_image*", recursive=True)
         files = sorted(path)
         m, s = calculate_activation_statistics(files, model, batch_size,
                                                dims, device, num_workers)
@@ -285,11 +285,20 @@ def save_fid_stats(paths, batch_size, device, dims, num_workers=1):
     np.savez_compressed(paths[1], mu=m1, sigma=s1)
 
 
-def main(path=None):
+def main(path=None, dataset_name="imagenet_compatible"):
     args = parser.parse_args()
 
     if path is not None:
         args.path[0] = path
+
+    if dataset_name == "imagenet_compatible":
+        args.path[1] = "pytorch_fid/imagenet.npz"
+    elif dataset_name == "cub_200_2011":
+        args.path[1] = "pytorch_fid/cub.npz"
+    elif dataset_name == "standford_car":
+        args.path[1] = "pytorch_fid/car.npz"
+    else:
+        raise ValueError("Invalid dataset name")
 
     if args.device is None:
         device = torch.device('cuda' if (torch.cuda.is_available()) else 'cpu')

@@ -16,14 +16,14 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--save_dir', default="output", type=str,
                     help='Where to save the adversarial examples, and other results')
-parser.add_argument('--images_root', default=r"demo\images", type=str,
+parser.add_argument('--images_root', default="demo/images", type=str,
                     help='The clean images root directory')
-parser.add_argument('--label_path', default=r"demo\labels.txt", type=str,
+parser.add_argument('--label_path', default="demo/labels.txt", type=str,
                     help='The clean images labels.txt')
 parser.add_argument('--is_test', default=False, type=bool,
                     help='Whether to test the robustness of the generated adversarial examples')
 parser.add_argument('--pretrained_diffusion_path',
-                    default=r"stabilityai/stable-diffusion-2-base",
+                    default="stabilityai/stable-diffusion-2-base",
                     type=str,
                     help='Change the path to `stabilityai/stable-diffusion-2-base` if want to use the pretrained model')
 
@@ -33,6 +33,9 @@ parser.add_argument('--iterations', default=30, type=int, help='Iterations of op
 parser.add_argument('--res', default=224, type=int, help='Input image resized resolution')
 parser.add_argument('--model_name', default="inception", type=str,
                     help='The surrogate model from which the adversarial examples are crafted')
+parser.add_argument('--dataset_name', default="imagenet_compatible", type=str,
+                    choices=["imagenet_compatible", "cub_200_2011", "standford_car"],
+                    help='The dataset name for generating adversarial examples')
 parser.add_argument('--is_apply_mask', default=False, type=bool,
                     help='Whether to leverage pseudo mask for better imperceptibility (See Appendix D)')
 parser.add_argument('--is_hard_mask', default=False, type=bool,
@@ -83,6 +86,17 @@ if __name__ == "__main__":
     iterations = args.iterations  # Iterations of optimizing the adv_image.
     res = args.res  # Input image resized resolution.
     model_name = args.model_name  # The surrogate model from which the adversarial examples are crafted.
+
+    if args.dataset_name == "imagenet_compatible":
+        assert model_name not in ["cubResnet50", "cubSEResnet154", "cubSEResnet101", "carResnet50", "carSEResnet154",
+                                  "carSEResnet101"], f"There is no pretrained weight of {model_name} for ImageNet-Compatible dataset."
+    if args.dataset_name == "cub_200_2011":
+        assert model_name in ["cubResnet50", "cubSEResnet154",
+                              "cubSEResnet101"], f"There is no pretrained weight of {model_name} for CUB_200_2011 dataset."
+    if args.dataset_name == "standford_car":
+        assert model_name in ["carResnet50", "carSEResnet154",
+                              "carSEResnet101"], f"There is no pretrained weight of {model_name} for Standford Cars dataset."
+
     save_dir = args.save_dir  # Where to save the adversarial examples, and other results.
     os.makedirs(save_dir, exist_ok=True)
 
@@ -97,7 +111,7 @@ if __name__ == "__main__":
 
     is_test = args.is_test  # Whether to test the robustness of the generated adversarial examples.
 
-    print("\n******Attack based on Diffusion*********")
+    print(f"\n******Attack based on Diffusion, Attacked Dataset: {args.dataset_name}*********")
 
     # Change the path to "stabilityai/stable-diffusion-2-base" if you want to use the pretrained model.
     pretrained_diffusion_path = args.pretrained_diffusion_path
@@ -116,7 +130,9 @@ if __name__ == "__main__":
 
     if is_test:
         all_clean_images = glob.glob(os.path.join(images_root, "*originImage*"))
+        all_clean_images = natsorted(all_clean_images, alg=ns.PATH)
         all_adv_images = glob.glob(os.path.join(images_root, "*adv_image*"))
+        all_adv_images = natsorted(all_adv_images, alg=ns.PATH)
         for image_path, adv_image_path in zip(all_clean_images, all_adv_images):
             tmp_image = Image.open(image_path).convert('RGB')
             tmp_image = tmp_image.resize((res, res), resample=Image.LANCZOS)
@@ -137,7 +153,7 @@ if __name__ == "__main__":
                 Test the robustness of the generated adversarial examples across a variety of normally trained models or
                 adversarially trained models.
         """
-        model_transfer(images, adv_images, label, res, save_path=save_dir, fid_path=images_root)
+        model_transfer(images, adv_images, label, res, save_path=save_dir, fid_path=images_root, args=args)
 
         sys.exit()
 
@@ -174,4 +190,4 @@ if __name__ == "__main__":
             Test the robustness of the generated adversarial examples across a variety of normally trained models or
             adversarially trained models.
     """
-    model_transfer(images, adv_images, label, res, save_path=save_dir)
+    model_transfer(images, adv_images, label, res, save_path=save_dir, args=args)
