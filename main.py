@@ -65,7 +65,7 @@ seed_torch(42)
 def run_diffusion_attack(image, label, diffusion_model, diffusion_steps, guidance=2.5,
                          self_replace_steps=1., save_dir=r"C:\Users\PC\Desktop\output", res=224,
                          model_name="inception", start_step=15, iterations=30, args=None):
-    controller = AttentionControlEdit(diffusion_steps, self_replace_steps)
+    controller = AttentionControlEdit(diffusion_steps, self_replace_steps, args.res)
 
     adv_image, clean_acc, adv_acc = diff_latent_attack.diffattack(diffusion_model, label, controller,
                                                                   num_inference_steps=diffusion_steps,
@@ -80,6 +80,8 @@ def run_diffusion_attack(image, label, diffusion_model, diffusion_steps, guidanc
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    assert args.res % 32 == 0 and args.res >= 96, "Please ensure the input resolution be a multiple of 32 and also >= 96."
+
     guidance = args.guidance
     diffusion_steps = args.diffusion_steps  # Total DDIM sampling steps.
     start_step = args.start_step  # Which DDIM step to start the attack.

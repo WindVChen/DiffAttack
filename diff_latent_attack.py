@@ -371,8 +371,8 @@ def diffattack(
         for ind, t in enumerate(model.scheduler.timesteps[1 + start_step - 1:]):
             latents = diffusion_step(model, latents, context[ind], t, guidance_scale)
 
-        before_attention_map = aggregate_attention(prompt, controller, 7, ("up", "down"), True, 0, is_cpu=False)
-        after_attention_map = aggregate_attention(prompt, controller, 7, ("up", "down"), True, 1, is_cpu=False)
+        before_attention_map = aggregate_attention(prompt, controller, args.res // 32, ("up", "down"), True, 0, is_cpu=False)
+        after_attention_map = aggregate_attention(prompt, controller, args.res // 32, ("up", "down"), True, 1, is_cpu=False)
 
         before_true_label_attention_map = before_attention_map[:, :, 1: len(true_label) - 1]
 
@@ -483,9 +483,9 @@ def diffattack(
 
     reset_attention_control(model)
 
-    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
+    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=args.res // 32, from_where=("up", "down"),
     #                            save_path=r"{}_crossAttentionBefore.jpg".format(save_path))
-    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=7, from_where=("up", "down"),
+    # utils.show_cross_attention(prompt, model.tokenizer, controller, res=args.res // 32, from_where=("up", "down"),
     #                            save_path=r"{}_crossAttentionAfter.jpg".format(save_path), select=1)
     # utils.show_self_attention_comp(prompt, controller, res=14, from_where=("up", "down"),
     #                                save_path=r"{}_selfAttentionBefore.jpg".format(save_path))

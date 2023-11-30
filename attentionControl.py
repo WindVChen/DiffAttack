@@ -34,10 +34,11 @@ class AttentionControl(abc.ABC):
 
 
 class AttentionStore(AttentionControl):
-    def __init__(self):
+    def __init__(self, res):
         super(AttentionStore, self).__init__()
         self.step_store = self.get_empty_store()
         self.attention_store = {}
+        self.res = res
 
     @staticmethod
     def get_empty_store():
@@ -46,7 +47,7 @@ class AttentionStore(AttentionControl):
 
     def forward(self, attn, is_cross: bool, place_in_unet: str):
         key = f"{place_in_unet}_{'cross' if is_cross else 'self'}"
-        if attn.shape[1] <= 14 ** 2:  # avoid memory overhead
+        if attn.shape[1] <= (self.res // 16) ** 2:  # avoid memory overhead
             self.step_store[key].append(attn)
         return attn
 
@@ -72,8 +73,8 @@ class AttentionStore(AttentionControl):
 
 class AttentionControlEdit(AttentionStore, abc.ABC):
     def __init__(self, num_steps: int,
-                 self_replace_steps: Union[float, Tuple[float, float]]):
-        super(AttentionControlEdit, self).__init__()
+                 self_replace_steps: Union[float, Tuple[float, float]], res):
+        super(AttentionControlEdit, self).__init__(res)
         self.batch_size = 2
         if type(self_replace_steps) is float:
             self_replace_steps = 0, self_replace_steps
