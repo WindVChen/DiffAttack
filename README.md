@@ -17,9 +17,13 @@ This repository is the official implementation of *DiffAttack*. If you encounter
 
 ## Updates
 
+[**11/30/2023**] Access the latest version, v2, of our paper on [Arxiv](https://arxiv.org/abs/2305.08192v2). 👋👋 In this updated release, we have enriched the content with additional discussions and experiments. Noteworthy additions include comprehensive experiments on diverse datasets (refer to Appendix I), exploration of various model structures (refer to Appendix H), and insightful comparisons with ensemble attacks (refer to Appendix G & K) as well as GAN-based methods (refer to Appendix J). Furthermore, we provide expanded details on the current limitations and propose potential directions for future research on diffusion-based methods (refer to Section 5).
+
 [**09/07/2023**] Besides **ImageNet-Compatible**, the code now also supports generating adversarial attacks on **CUB_200_2011** and **Standford Cars** datasets. 🚀🚀 Please refer to [Requirements](#Requirements) for more details.
 
 [**05/16/2023**] Code is public.
+
+[**05/14/2023**] Paper is publicly accessible on [ArXiv](https://arxiv.org/abs/2305.08192) now.
 
 [**04/30/2023**] Code cleanup done. Waiting to be made public.
 
