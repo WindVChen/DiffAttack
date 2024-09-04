@@ -33,7 +33,7 @@ limitations under the License.
 """
 import os
 import pathlib
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+from argparse import Namespace
 
 import numpy as np
 import torch
@@ -51,24 +51,6 @@ except ImportError:
 
 from pytorch_fid.inception import InceptionV3
 
-parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-parser.add_argument('--batch-size', type=int, default=50,
-                    help='Batch size to use')
-parser.add_argument('--num-workers', type=int,
-                    help=('Number of processes to use for data loading. '
-                          'Defaults to `min(8, num_cpus)`'))
-parser.add_argument('--device', type=str, default=None,
-                    help='Device to use. Like cuda, cuda:0 or cpu')
-parser.add_argument('--dims', type=int, default=2048,
-                    choices=list(InceptionV3.BLOCK_INDEX_BY_DIM),
-                    help=('Dimensionality of Inception features to use. '
-                          'By default, uses pool3 features'))
-parser.add_argument('--save-stats', action='store_true',
-                    help=('Generate an npz archive from a directory of samples. '
-                          'The first path is used as input and the second as output.'))
-parser.add_argument('--path', type=str, nargs=2, default=[r"C:\Users\PC\Desktop\output", "pytorch_fid/imagenet.npz"],
-                    help=('Paths to the generated images or '
-                          'to .npz statistic files'))
 
 IMAGE_EXTENSIONS = {'bmp', 'jpg', 'jpeg', 'pgm', 'png', 'ppm',
                     'tif', 'tiff', 'webp'}
@@ -286,7 +268,14 @@ def save_fid_stats(paths, batch_size, device, dims, num_workers=1):
 
 
 def main(path=None, dataset_name="imagenet_compatible"):
-    args = parser.parse_args()
+    args = Namespace(
+                batch_size=50,
+                num_workers=None,  # You can manually set this value if needed
+                device=None,
+                dims=2048,
+                save_stats=False,
+                path=[r"C:\Users\PC\Desktop\output", "pytorch_fid/imagenet.npz"]
+            )
 
     if path is not None:
         args.path[0] = path
