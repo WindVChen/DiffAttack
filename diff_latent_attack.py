@@ -94,7 +94,6 @@ def register_attention_control(model, controller):
             temb: Optional[torch.FloatTensor] = None,
             # scale: float = 1.0,
         ):
-            # print(self.spatial_norm, attention_mask, self.group_norm) # None None None
             if self.spatial_norm is not None:
                 hidden_states = self.spatial_norm(hidden_states, temb)
 
