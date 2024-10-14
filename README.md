@@ -17,6 +17,8 @@ This repository is the official implementation of *DiffAttack*. If you encounter
 
 ## Updates
 
+[**10/14/2024**] Thanks for the contributions from @[AndPuQing](https://github.com/WindVChen/DiffAttack/pull/15) and @[yuangan](https://github.com/WindVChen/DiffAttack/pull/28), *DiffAttack* currently supports the newest version of `diffusers` (0.30.3). Please note that due to differences in package versions, the final evaluated results may vary slightly. To reproduce the results from our paper, we recommend installing `diffusers==0.9.0` and using the backed-up script [diff_latent_attack-0.9.0.py](diff_latent_attack-0.9.0.py).
+
 [**11/30/2023**] Access the latest version, v2, of our paper on [Arxiv](https://arxiv.org/abs/2305.08192v2). 👋👋 In this updated release, we have enriched the content with additional discussions and experiments. Noteworthy additions include comprehensive experiments on diverse datasets (refer to Appendix I), exploration of various model structures (refer to Appendix H), and insightful comparisons with ensemble attacks (refer to Appendix G & K) as well as GAN-based methods (refer to Appendix J). Furthermore, we provide expanded details on the current limitations and propose potential directions for future research on diffusion-based methods (refer to Section 5).
 
 [**09/07/2023**] Besides **ImageNet-Compatible**, the code now also supports generating adversarial attacks on **CUB_200_2011** and **Standford Cars** datasets. 🚀🚀 Please refer to [Requirements](#Requirements) for more details.

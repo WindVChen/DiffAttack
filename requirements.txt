@@ -1,5 +1,5 @@
 adversarial_robustness_toolbox==1.13.1
-diffusers==0.9.0
+diffusers==0.30.3
 eagerpy==0.30.0
 natsort==8.2.0
 numpy==1.21.2
