@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1><a href="https://arxiv.org/abs/2305.08192">Diffusion Models for Imperceptible and Transferable Adversarial Attack</a></h1>
+<h1><a href="https://ieeexplore.ieee.org/abstract/document/10716799">Diffusion Models for Imperceptible and Transferable Adversarial Attack</a></h1>
 
 **[Jianqi Chen](https://windvchen.github.io/), [Hao Chen](https://scholar.google.com.hk/citations?hl=en&user=BEDNoZIAAAAJ&view_op=list_works&sortby=pubdate), [Keyan Chen](https://scholar.google.com.hk/citations?hl=en&user=5RF4ia8AAAAJ), [Yilan Zhang](https://scholar.google.com.hk/citations?user=wZ4M4ecAAAAJ&hl=en&oi=ao), [Zhengxia Zou](https://scholar.google.com.hk/citations?hl=en&user=DzwoyZsAAAAJ), and [Zhenwei Shi](https://scholar.google.com.hk/citations?hl=en&user=kNhFWQIAAAAJ)**
 
@@ -13,9 +13,13 @@
 
 ### Share us a :star: if this repo does help
 
-This repository is the official implementation of *DiffAttack*. If you encounter any question, please feel free to contact us. You can create an issue or just send email to me windvchen@gmail.com. Also welcome for any idea exchange and discussion.
+This repository is the official implementation of *DiffAttack*. The newest version of the paper can be accessed in [IEEE](https://ieeexplore.ieee.org/abstract/document/10716799), the previous version of the paper can be accessed in [arXiv](https://arxiv.org/abs/2305.08192). (Accepted by TPAMI 2024)
+
+If you encounter any question, please feel free to contact us. You can create an issue or just send email to me windvchen@gmail.com. Also welcome for any idea exchange and discussion.
 
 ## Updates
+
+[**10/20/2024**] This paper is finally accepted by TPAMI. 👋 You can find the newest version of paper [here](https://ieeexplore.ieee.org/abstract/document/10716799) (with additional new results and experiments). For the previous version, please refer to [here](https://arxiv.org/abs/2305.08192). Please note that the attack methods compared in both versions differ slightly; for instance, the TPAMI version includes more recent methods, while some older ones were omitted. We recommend reviewing both versions to gain a comprehensive understanding of the comparisons with existing approaches.
 
 [**10/14/2024**] Thanks for the contributions from @[AndPuQing](https://github.com/WindVChen/DiffAttack/pull/15) and @[yuangan](https://github.com/WindVChen/DiffAttack/pull/28), *DiffAttack* currently supports the newest version of `diffusers` (0.30.3). Please note that due to differences in package versions, the final evaluated results may vary slightly. To reproduce the results from our paper, we recommend installing `diffusers==0.9.0` and using the backed-up script [diff_latent_attack-0.9.0.py](diff_latent_attack-0.9.0.py).
 
@@ -123,12 +127,16 @@ Apart from the adversarially trained models, we also evaluate our attack's power
 ## Citation & Acknowledgments
 If you find this paper useful in your research, please consider citing:
 ```
-@article{chen2023diffusion,
-  title={Diffusion Models for Imperceptible and Transferable Adversarial Attack},
+@ARTICLE{10716799,
   author={Chen, Jianqi and Chen, Hao and Chen, Keyan and Zhang, Yilan and Zou, Zhengxia and Shi, Zhenwei},
-  journal={arXiv preprint arXiv:2305.08192},
-  year={2023}
-}
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={Diffusion Models for Imperceptible and Transferable Adversarial Attack}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-17},
+  keywords={Diffusion models;Perturbation methods;Closed box;Noise reduction;Solid modeling;Image color analysis;Glass box;Semantics;Gaussian noise;Purification;Adversarial attack;diffusion model;imperceptible attack;transferable attack},
+  doi={10.1109/TPAMI.2024.3480519}}
 ```
 
 Also thanks for the open source code of [Prompt-to-Prompt](https://github.com/google/prompt-to-prompt). Some of our codes are based on them.
