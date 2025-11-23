@@ -74,7 +74,7 @@ Many existing adversarial attacks generate $L_p$-norm perturbations on image RGB
    - If you want to test the full `ImageNet-Compatible` dataset, please download the dataset [ImageNet-Compatible](https://drive.google.com/file/d/1sAD1aVLUsgao1X-mu6PwcBL8s68dm5U9/view?usp=sharing) and then change the settings of `--images_root` and `--label_path` in [main.py](main.py)
 
 4. Pre-trained Models
-   - We adopt `Stable Diffusion 2.0` as our diffusion model, you can load the pretrained weight by setting `--pretrained_diffusion_path="stabilityai/stable-diffusion-2-base"` in [main.py](main.py).
+   - We adopt `Stable Diffusion 2.0` as our diffusion model. **Note:** The original `stabilityai/stable-diffusion-2-base` repository has been retracted or set to private on HuggingFace. You can use the alternative backed-up repository by setting `--pretrained_diffusion_path="Manojb/stable-diffusion-2-base"` (default) in [main.py](main.py), or use the original path if it becomes available again.
    - For the pretrained weights of the adversarially trained models (Adv-Inc-v3, Inc-v3<sub>ens3</sub>, Inc-v3<sub>ens4</sub>, IncRes-v2<sub>ens</sub>) in Section 4.2.2 of our paper, you can download them from [here](https://github.com/ylhz/tf_to_pytorch_model) and then place them into the directory `pretrained_models`.
 
 5. (Supplement) Attack **CUB_200_2011** and **Standford Cars** datasets

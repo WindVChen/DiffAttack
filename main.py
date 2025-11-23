@@ -22,8 +22,10 @@ parser.add_argument('--label_path', default="demo/labels.txt", type=str,
                     help='The clean images labels.txt')
 parser.add_argument('--is_test', default=False, type=bool,
                     help='Whether to test the robustness of the generated adversarial examples')
+# Note: The original stabilityai/stable-diffusion-2-base has been retracted or set to private on HuggingFace,
+# so we use Manojb/stable-diffusion-2-base as an alternative backed-up repository.
 parser.add_argument('--pretrained_diffusion_path',
-                    default="stabilityai/stable-diffusion-2-base",
+                    default="Manojb/stable-diffusion-2-base",
                     type=str,
                     help='Change the path to `stabilityai/stable-diffusion-2-base` if want to use the pretrained model')
 
